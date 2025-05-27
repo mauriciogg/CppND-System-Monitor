@@ -1,0 +1,70 @@
+s -l /proc
+total 0
+dr-xr-xr-x  9 root   root       0 May 27 02:50 1
+dr-xr-xr-x  9 root   root       0 May 27 03:12 6160
+dr-xr-xr-x  9 root   root       0 May 27 03:13 6491
+dr-xr-xr-x  9 vscode vscode     0 May 27 02:50 71
+dr-xr-xr-x  9 root   root       0 May 27 03:21 7627
+dr-xr-xr-x  9 root   root       0 May 27 03:21 7633
+dr-xr-xr-x  9 vscode vscode     0 May 27 03:21 7648
+dr-xr-xr-x  9 root   root       0 May 27 03:21 7667
+dr-xr-xr-x  9 vscode vscode     0 May 27 03:21 8129
+dr-xr-xr-x  9 vscode vscode     0 May 27 03:21 8200
+dr-xr-xr-x  9 vscode vscode     0 May 27 03:22 8257
+dr-xr-xr-x  9 root   root       0 May 27 03:26 9432
+dr-xr-xr-x  9 root   root       0 May 27 03:27 9573
+dr-xr-xr-x  9 root   root       0 May 27 03:27 9574
+drwxrwxrwt  2 root   root      40 May 27 02:50 acpi
+-r--r--r--  1 root   root       0 May 27 02:50 buddyinfo
+dr-xr-xr-x  4 root   root       0 May 27 02:50 bus
+-r--r--r--  1 root   root       0 May 27 02:50 cgroups
+-r--r--r--  1 root   root       0 May 27 02:50 cmdline
+-r--r--r--  1 root   root   25098 May 27 02:50 config.gz
+-r--r--r--  1 root   root       0 May 27 02:50 consoles
+-r--r--r--  1 root   root       0 May 27 02:50 cpuinfo
+-r--r--r--  1 root   root       0 May 27 02:50 crypto
+-r--r--r--  1 root   root       0 May 27 02:50 devices
+-r--r--r--  1 root   root       0 May 27 02:50 diskstats
+-r--r--r--  1 root   root       0 May 27 02:50 dma
+dr-xr-xr-x  4 root   root       0 May 27 02:50 driver
+-r--r--r--  1 root   root       0 May 27 02:50 execdomains
+-r--r--r--  1 root   root       0 May 27 02:50 filesystems
+dr-xr-xr-x 11 root   root       0 May 27 02:50 fs
+-r--r--r--  1 root   root       0 May 27 02:50 interrupts
+-r--r--r--  1 root   root       0 May 27 02:50 iomem
+-r--r--r--  1 root   root       0 May 27 02:50 ioports
+dr-xr-xr-x 24 root   root       0 May 27 02:50 irq
+-r--r--r--  1 root   root       0 May 27 02:50 kallsyms
+crw-rw-rw-  1 root   root    1, 3 May 27 02:50 kcore
+-r--r--r--  1 root   root       0 May 27 02:50 key-users
+crw-rw-rw-  1 root   root    1, 3 May 27 02:50 keys
+-r--------  1 root   root       0 May 27 02:50 kmsg
+-r--------  1 root   root       0 May 27 02:50 kpagecgroup
+-r--------  1 root   root       0 May 27 02:50 kpagecount
+-r--------  1 root   root       0 May 27 02:50 kpageflags
+-r--r--r--  1 root   root       0 May 27 02:50 loadavg
+-r--r--r--  1 root   root       0 May 27 02:50 locks
+-r--r--r--  1 root   root       0 May 27 02:50 mdstat
+-r--r--r--  1 root   root       0 May 27 02:50 meminfo
+-r--r--r--  1 root   root       0 May 27 02:50 misc
+-r--r--r--  1 root   root       0 May 27 02:50 modules
+lrwxrwxrwx  1 root   root      11 May 27 02:50 mounts -> self/mounts
+-rw-r--r--  1 root   root       0 May 27 02:50 mtrr
+lrwxrwxrwx  1 root   root       8 May 27 02:50 net -> self/net
+-r--------  1 root   root       0 May 27 02:50 pagetypeinfo
+-r--r--r--  1 root   root       0 May 27 02:50 partitions
+-r--r--r--  1 root   root       0 May 27 02:50 schedstat
+lrwxrwxrwx  1 root   root       0 May 27 02:50 self -> 9574
+-r--r--r--  1 root   root       0 May 27 02:50 softirqs
+-r--r--r--  1 root   root       0 May 27 02:50 stat
+-r--r--r--  1 root   root       0 May 27 02:50 swaps
+dr-xr-xr-x  1 root   root       0 May 27 02:50 sys
+dr-xr-xr-x  5 root   root       0 May 27 02:50 sysvipc
+lrwxrwxrwx  1 root   root       0 May 27 02:50 thread-self -> 9574/task/9574
+crw-rw-rw-  1 root   root    1, 3 May 27 02:50 timer_list
+dr-xr-xr-x  6 root   root       0 May 27 02:50 tty
+-r--r--r--  1 root   root       0 May 27 02:50 uptime
+-r--r--r--  1 root   root       0 May 27 02:50 version
+-r--------  1 root   root       0 May 27 02:50 vmallocinfo
+-r--r--r--  1 root   root       0 May 27 02:50 vmstat
+-r--r--r--  1 root   root       0 May 27 02:50 zoneinfo

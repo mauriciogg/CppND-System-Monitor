@@ -9,6 +9,11 @@
 
 class System {
  public:
+  System() {
+    cpu_ = Processor();
+    kernel_ = LinuxParser::Kernel();
+    operating_system_ = LinuxParser::OperatingSystem();
+  }
   Processor& Cpu();                   // TODO: See src/system.cpp
   std::vector<Process>& Processes();  // TODO: See src/system.cpp
   float MemoryUtilization();          // TODO: See src/system.cpp
@@ -22,6 +27,8 @@ class System {
  private:
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
+  std::string kernel_;
+  std::string operating_system_;
 };
 
 #endif
