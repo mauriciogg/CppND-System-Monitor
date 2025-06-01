@@ -3,5 +3,5 @@
 
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() { 
-    return LinuxParser::CpuUtilization()[0];
+    return LinuxParser::CpuUtilization();
 }

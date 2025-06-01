@@ -1,19 +1,25 @@
 #include "linux_parser.h"
 
-#include <cassert>
 #include <dirent.h>
-#include <filesystem>
-#include <fstream>
-#include <string>
-#include <tuple>
 #include <unistd.h>
+#include <string>
 #include <vector>
+#include <filesystem>
+#include <algorithm>
+#include <sstream>
+#include <fstream>
+#include <tuple>
+#include <cassert>
+#include <sys/time.h>
 
-using std::tuple;
 using std::stof;
 using std::string;
 using std::to_string;
 using std::vector;
+using std::tuple;
+using std::get;
+using std::filesystem::directory_iterator;
+using std::filesystem::path;
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
@@ -68,18 +74,13 @@ vector<int> LinuxParser::Pids() {
 	return pids;
 }
 
-// TODO(mgg): replace with std::getline() and support a arbitrary number of splits
+// Helper function to split a string by delimiter
 tuple<string, string> split(const string& s, const string delimiter) {
-		auto pos = s.find(delimiter);
-
-		// TODO(mgg): handle gracefullly
-		assert(pos != string::npos);
-
-		auto key = s.substr(0, pos);
-		auto value = s.substr(pos + 1, s.length());
-		return std::make_tuple(key, value);
+    size_t pos = s.find(delimiter);
+    string key = s.substr(0, pos);
+    string value = s.substr(pos + delimiter.length());
+    return {key, value};
 }
-
 
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { 
@@ -111,7 +112,7 @@ float LinuxParser::MemoryUtilization() {
 		// Assume kb
 		memfree = stoi(std::get<1>(split(value, " ")));
   }
-	return memfree / memtotal;
+	return (memtotal - memfree) / memtotal;
 }
 
 // TODO: Read and return the system uptime
@@ -247,43 +248,72 @@ long LinuxParser::IdleJiffies() {
 }
 
 // TODO: Read and return CPU utilization
-vector<float> LinuxParser::CpuUtilization() { 
-  vector<float> cpu_utilization;
-  std::ifstream stream(kProcDirectory + kStatFilename);
-  string line;
-  
-  if (stream.is_open()) {
-    // cpu (aggregate)
-    // cpu0 ...
-    // cpu1 ...
-    // ...
-    // Parse only the first cpu (aggregate)
-    if (std::getline(stream, line)) {
-      if (line.substr(0, 3) == "cpu") {
-        std::istringstream linestream(line);
-        string cpu;
-        vector<long> values;
-        long value;
-        
-        linestream >> cpu; // CPU id
-        
-        while (linestream >> value) {
-          values.push_back(value);
+LinuxParser::CPUStats LinuxParser::CpuStats() {
+    CPUStats stats{};
+    std::ifstream stream(kProcDirectory + kStatFilename);
+    string line;
+    
+    if (stream.is_open()) {
+        // Read only the first line (aggregate CPU stats)
+        if (std::getline(stream, line)) {
+            if (line.substr(0, 3) == "cpu") {
+                std::istringstream linestream(line);
+                string cpu;
+                linestream >> cpu; // Skip "cpu" label
+                
+                linestream >> stats.user >> stats.nice >> stats.system >> 
+                          stats.idle >> stats.iowait >> stats.irq >> 
+                          stats.softirq >> stats.steal >> stats.guest >> 
+                          stats.guest_nice;
+            }
         }
-        
-        // Calculate utilization for CPU_i
-        if (values.size() >= 7) {  
-          long total_time = 0;
-          for (int i = 0; i < 7; i++) {
-            total_time += values[i];
-          }
-          long idle_time = values[3] + values[4]; 
-          cpu_utilization.push_back(1.0 - (static_cast<float>(idle_time) / total_time));
-        }
-      }
     }
-  }
-  return cpu_utilization;
+    return stats;
+}
+
+// Returns the cpu utilization between calls of CpuUtilization
+// Note that the refresh rate is not defined here but by however calls
+// this function (ncurses)
+float LinuxParser::CpuUtilization() { 
+    static CPUStats prev_stats{};
+    static struct timeval prev_time{};
+    
+    CPUStats current_stats = CpuStats();
+    
+    struct timeval current_time;
+    gettimeofday(&current_time, nullptr);
+    
+    float elapsed_time = 0.0;
+    if (prev_time.tv_sec != 0) {
+        elapsed_time = (current_time.tv_sec - prev_time.tv_sec) +
+                      (current_time.tv_usec - prev_time.tv_usec) / 1000000.0;
+    }
+    
+
+    float cpu_utilization = 0.0;
+    if (elapsed_time > 0.0) {
+        // Calculate total CPU time difference
+        long total_time_diff = (current_stats.user - prev_stats.user) +
+                             (current_stats.nice - prev_stats.nice) +
+                             (current_stats.system - prev_stats.system) +
+                             (current_stats.idle - prev_stats.idle) +
+                             (current_stats.iowait - prev_stats.iowait) +
+                             (current_stats.irq - prev_stats.irq) +
+                             (current_stats.softirq - prev_stats.softirq) +
+                             (current_stats.steal - prev_stats.steal);
+        
+        // Calculate idle time difference
+        long idle_time_diff = (current_stats.idle - prev_stats.idle) +
+                            (current_stats.iowait - prev_stats.iowait);
+        
+        if (total_time_diff > 0) {
+            cpu_utilization = 1.0 - (static_cast<float>(idle_time_diff) / total_time_diff);
+        }
+    }
+
+    prev_stats = current_stats;
+    prev_time = current_time;
+    return cpu_utilization;
 }
 
 // TODO: Read and return the total number of processes

@@ -6,7 +6,7 @@
 #include "system.h"
 
   // For some reason ctl-c is being ignored (probably ncurses)
-  void signal_handler(int signal_number) {
+  void signal_handler(int signal_number[[maybe_unused]]) {
         std::exit(1); 
   }
 
